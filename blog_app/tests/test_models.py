@@ -13,7 +13,7 @@ def test_create_author(author_1, author_2):
 
 
 @pytest.mark.django_db
-def test_create_author(post_1, post_2, post_3):
+def test_create_author_2(post_1, post_2, post_3):
     """Проверяем создание объекта поста."""
     assert Post.objects.count() == 3
     assert post_1.title == "Тестовый пост 1"

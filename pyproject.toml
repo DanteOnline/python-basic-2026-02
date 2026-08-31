@@ -14,7 +14,9 @@ dependencies = [
     "pytest (>=9.1.1,<10.0.0)",
     "pytest-django (>=4.14.0,<5.0.0)",
     "pytest-mock (>=3.15.1,<4.0.0)",
-    "beautifulsoup4 (>=4.15.0,<5.0.0)"
+    "beautifulsoup4 (>=4.15.0,<5.0.0)",
+    "pylint (>=4.0.8,<5.0.0)",
+    "black (>=26.5.1,<27.0.0)"
 ]
 
 

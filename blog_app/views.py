@@ -1,24 +1,30 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.http import HttpResponse
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView,
+)
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from blog_app.models import Post, Author
-from .forms import PostForm, PostModelForm
+from blog_app.models import Post
+from .forms import PostModelForm
 
 
 class IndexTemplateView(TemplateView):
-    template_name = 'blog_app/index.html'
+    template_name = "blog_app/index.html"
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context['title'] = 'Список постов!'
     #     return context
 
+
 class AboutTemplateView(TemplateView):
-    template_name = 'blog_app/about.html'
+    template_name = "blog_app/about.html"
 
 
 class PostBase:
@@ -27,15 +33,16 @@ class PostBase:
 
 class PostListView(PostBase, ListView):
     """Список постов."""
+
     # model = Post
     # template_name = "blog_app/post_list.html"
-    context_object_name = 'posts'
+    context_object_name = "posts"
 
     def get_queryset(self):
         """Фильтруем список постов."""
         queryset = super().get_queryset()
-        author_id = self.request.GET.get('author')
-        min_rating = self.request.GET.get('rating')
+        author_id = self.request.GET.get("author")
+        min_rating = self.request.GET.get("rating")
         if author_id:
             queryset = queryset.filter(author_id=author_id)
         if min_rating:
@@ -45,59 +52,63 @@ class PostListView(PostBase, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Список постов!'
+        context["title"] = "Список постов!"
         return context
 
 
 class PostDetailView(LoginRequiredMixin, PostBase, DetailView):
     """Детальный постов."""
+
     # model = Post
     # template_name = 'blog_app/post_detail.html'
-    context_object_name = 'post'
+    context_object_name = "post"
 
     def get(self, request, *args, **kwargs):
         post = self.get_object()
-        post.rating = getattr(post, 'rating', 0) + 1
-        post.save(update_fields=['rating'])
+        post.rating = getattr(post, "rating", 0) + 1
+        post.save(update_fields=["rating"])
         return super().get(request, *args, **kwargs)
         # return post
 
 
 class PostCreateView(LoginRequiredMixin, PostBase, CreateView):
     """Добавление нового поста."""
+
     # model = Post
     # template_name = 'blog_app/post_form.html'
     form_class = PostModelForm
-    success_url = reverse_lazy('post_list')
+    success_url = reverse_lazy("post_list")
 
     def form_valid(self, form):
-        messages.success(self.request, 'Пост успешно создан')
+        messages.success(self.request, "Пост успешно создан")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Создать пост!'
+        context["title"] = "Создать пост!"
         return context
 
 
 class PostUpdateView(LoginRequiredMixin, PostBase, UpdateView):
     """Редактирование  поста."""
+
     # model = Post
     # template_name = 'blog_app/post_form.html'
     form_class = PostModelForm
-    success_url = reverse_lazy('post_list')
+    success_url = reverse_lazy("post_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Обновить пост!'
+        context["title"] = "Обновить пост!"
         return context
 
 
 class PostDeleteView(LoginRequiredMixin, PostBase, DeleteView):
     """Удаление  поста."""
+
     # model = Post
-    template_name = 'blog_app/post_delete.html'
-    success_url = reverse_lazy('post_list')
+    template_name = "blog_app/post_delete.html"
+    success_url = reverse_lazy("post_list")
 
 
 # def post_edit(request, post_id):
@@ -128,7 +139,6 @@ class PostDeleteView(LoginRequiredMixin, PostBase, DeleteView):
 #     return render(request, 'blog_app/post_list.html', context=context)
 
 
-
 # def post_detail(request, post_id):
 #     """Детальный постов."""
 #     post = get_object_or_404(Post, pk=post_id)
@@ -137,7 +147,6 @@ class PostDeleteView(LoginRequiredMixin, PostBase, DeleteView):
 #         'title': post.title,
 #     }
 #     return render(request, 'blog_app/post_detail.html', context=context)
-
 
 
 # def post_add(request):

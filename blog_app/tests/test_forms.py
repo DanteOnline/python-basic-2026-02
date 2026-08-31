@@ -1,7 +1,7 @@
 import pytest
 
 from blog_app.forms import PostForm, PostModelForm
-from blog_app.models import Post, Author, Tag
+from blog_app.models import Tag
 
 
 @pytest.mark.django_db
